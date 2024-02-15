@@ -41,7 +41,7 @@ hash_table_t *hash_table_create() {
     return hash_table;
 }
 
-int32_t hash_table_add(hash_table_t *hash_table, char *key, int32_t value) {
+int32_t hash_table_add(hash_table_t *hash_table, char *key, void *value) {
     // rehash
     if ((hash_table->size_all_non_nullptr - hash_table->size) >
         (hash_table->buffer_size * REHASH_RATIO)) {
@@ -109,7 +109,7 @@ bool hash_table_find(hash_table_t *hash_table, char *key) {
     return false;
 }
 
-int32_t hash_table_get(hash_table_t *hash_table, char *key) {
+void *hash_table_get(hash_table_t *hash_table, char *key) {
     size_t hash1 = hash_func1(key, hash_table->buffer_size);
     size_t hash2 = hash_func2(key, hash_table->buffer_size);
     size_t i = 0;
@@ -121,7 +121,7 @@ int32_t hash_table_get(hash_table_t *hash_table, char *key) {
         i += 1;
         hash1 = (hash1 + hash2 * i) % hash_table->buffer_size;
     }
-    return -1;
+    return NULL;
 }
 
 bool hash_table_remove(hash_table_t *hash_table, char *key) {
